@@ -391,8 +391,10 @@ src="https://picsum.photos/300/400">
 
 </div>
 
-<div id="qr"></div>
-
+<div id="qr">
+  <img
+  src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://google.com"
+  style="width:110px;height:110px;border-radius:6px;">
 </div>
 
 <div class="timer_track">
