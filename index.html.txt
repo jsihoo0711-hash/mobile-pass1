@@ -35,7 +35,6 @@ GitHub Pages / Netlify 업로드하면
 
 <link rel="apple-touch-icon" href="icon-192.png">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 
@@ -527,14 +526,6 @@ navigator.serviceWorker.register("service-worker.js");
 
 /* QR */
 
-new QRCode(
-document.getElementById("qr"),
-{
-text:"https://example.com",
-width:110,
-height:110
-}
-);
 
 /* 타이머 */
 
