@@ -1,348 +1,100 @@
-<!--
-파일 구성
-
-/index.html
-/manifest.json
-/service-worker.js
-/icon-192.png
-/icon-512.png
-
-이렇게 5개 넣고
-GitHub Pages / Netlify 업로드하면
-아이폰에서 PWA 설치 가능
--->
-
-<!-- ========================= -->
-<!-- index.html -->
-<!-- ========================= -->
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>Digital Mobile Pass</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Pass</title>
 
 <link rel="manifest" href="manifest.json">
 
 <meta name="theme-color" content="#0057c8">
 
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Mobile Pass">
-
-<link rel="apple-touch-icon" href="icon-192.png">
-
-
 <style>
 
-:root{
---bg:#edf1f5;
---blue:#0057c8;
-}
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
-}
-
 body{
+margin:0;
+font-family:sans-serif;
 background:linear-gradient(90deg,#63c7f7,#8f49ff);
-font-family:"Apple SD Gothic Neo",sans-serif;
-overflow:hidden;
 }
 
 #app{
-width:100%;
 max-width:390px;
 height:100vh;
 margin:auto;
-background:var(--bg);
-position:relative;
+background:#edf1f5;
 overflow:hidden;
+position:relative;
 }
 
-/* 상단 */
-
-.top_bar{
+.top{
 background:#dfe6ee;
-padding:18px 18px 14px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.logo_wrap{
-display:flex;
-align-items:center;
-gap:10px;
-font-size:20px;
+padding:20px;
+font-size:22px;
 font-weight:800;
 }
 
-.logo{
-width:42px;
-height:42px;
-border-radius:50%;
-background:#0057c8;
-}
-
-.menu{
-font-size:34px;
-color:#6e6e6e;
-}
-
-/* 카드 */
-
 .card{
-width:calc(100% - 36px);
-margin:24px auto 0;
 background:#fff;
-border-radius:28px 28px 0 0;
-padding:30px 24px 0;
-min-height:720px;
+margin:20px;
+border-radius:24px;
+padding:20px;
 }
 
-.photo_area{
+.photo{
 text-align:center;
 }
 
-.photo_area img{
-width:132px;
-height:168px;
+.photo img{
+width:130px;
+height:170px;
 object-fit:cover;
-border-radius:4px;
-}
-
-.info_wrap{
-margin-top:36px;
-display:flex;
-justify-content:space-between;
+border-radius:6px;
 }
 
 .name{
-font-size:34px;
+font-size:32px;
 font-weight:900;
+margin-top:20px;
 }
 
 .birth{
+font-size:26px;
 margin-top:10px;
-font-size:28px;
-font-weight:700;
 }
 
 .addr{
 margin-top:10px;
-font-size:15px;
 color:#666;
-line-height:1.4;
-width:180px;
 }
 
 #qr{
-width:116px;
-height:116px;
-display:flex;
-justify-content:center;
-align-items:center;
+margin-top:20px;
 }
 
-.timer_track{
-width:100%;
-height:6px;
-background:#ddd;
-margin-top:46px;
-border-radius:999px;
-overflow:hidden;
+#qr img{
+width:110px;
+height:110px;
 }
 
-#timer_bar{
-width:100%;
-height:100%;
-background:#1780ff;
-transition:.1s linear;
-}
-
-.timer_label{
-margin-top:8px;
-display:flex;
-justify-content:space-between;
-font-size:13px;
-color:#333;
-}
-
-/* 안내 */
-
-.scan_text{
-width:calc(100% - 36px);
-margin:auto;
-background:#fff;
-text-align:center;
-padding:14px 0;
-color:#aaa;
-font-size:14px;
-}
-
-/* 버튼 */
-
-.detail_btn{
-width:calc(100% - 36px);
-margin:auto;
-background:var(--blue);
+.btn{
+background:#0057c8;
 color:#fff;
 text-align:center;
-padding:26px 0;
-font-size:25px;
-border-radius:0 0 28px 28px;
+padding:22px;
+border-radius:20px;
+margin-top:20px;
+font-size:22px;
 }
-
-/* 배너 */
 
 .banner{
 position:absolute;
 bottom:0;
-left:0;
 width:100%;
-overflow:hidden;
 background:linear-gradient(90deg,#4cc7f7,#9148ff);
-}
-
-.banner_track{
-display:flex;
-width:200%;
-animation:flow 8s linear infinite;
-}
-
-.banner_text{
-width:50%;
-padding:14px 0;
-text-align:center;
-font-size:16px;
 color:#fff;
-opacity:.85;
-}
-
-@keyframes flow{
-0%{transform:translateX(0)}
-100%{transform:translateX(-50%)}
-}
-
-/* 상세 */
-
-#detail_page{
-position:absolute;
-inset:0;
-background:var(--bg);
-display:none;
-flex-direction:column;
-}
-
-.detail_card{
-width:calc(100% - 36px);
-margin:24px auto 0;
-background:#fff;
-border-radius:28px;
-padding:30px 24px;
-min-height:720px;
-}
-
-.detail_photo{
-text-align:center;
-}
-
-.detail_photo img{
-width:132px;
-height:168px;
-object-fit:cover;
-}
-
-.detail_name{
-margin-top:36px;
-font-size:36px;
-font-weight:900;
-}
-
-.detail_birth{
-margin-top:12px;
-font-size:30px;
-font-weight:700;
-}
-
-.detail_addr{
-margin-top:14px;
-font-size:16px;
-line-height:1.45;
-color:#666;
-}
-
-.bottom_info{
-margin-top:250px;
-text-align:center;
-}
-
-.issue_date{
-font-size:22px;
-font-weight:700;
-}
-
-.city{
-margin-top:12px;
-font-size:34px;
-font-weight:900;
-}
-
-.back_btn{
-position:absolute;
-left:14px;
-bottom:110px;
-width:48px;
-height:48px;
-border-radius:50%;
-background:#fff;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:30px;
-box-shadow:0 4px 12px rgba(0,0,0,.18);
-}
-
-/* 관리자 */
-
-#admin{
-position:fixed;
-inset:0;
-background:#000;
-display:none;
-z-index:999;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-gap:12px;
-padding:20px;
-}
-
-#admin input{
-width:100%;
-max-width:320px;
 padding:14px;
-border:none;
-border-radius:12px;
-font-size:16px;
-}
-
-#admin button{
-width:100%;
-max-width:320px;
-padding:15px;
-border:none;
-background:#1780ff;
-color:#fff;
-border-radius:12px;
-font-size:18px;
+text-align:center;
+font-size:15px;
 }
 
 </style>
@@ -352,294 +104,55 @@ font-size:18px;
 
 <div id="app">
 
-<div id="main_page">
-
-<div class="top_bar" id="top_touch">
-
-<div class="logo_wrap">
-<div class="logo"></div>
+<div class="top">
 Digital Mobile Pass
-</div>
-
-<div class="menu">☰</div>
-
 </div>
 
 <div class="card">
 
-<div class="photo_area">
-<img
-id="main_photo"
-src="https://picsum.photos/300/400">
+<div class="photo">
+
+<img src="https://picsum.photos/300/400">
+
 </div>
 
-<div class="info_wrap">
-
-<div>
-
-<div class="name" id="main_name">
+<div class="name">
 김민준
 </div>
 
-<div class="birth" id="main_birth">
+<div class="birth">
 060424
 </div>
 
-<div class="addr" id="main_addr">
+<div class="addr">
 서울특별시 강남구
 </div>
 
-</div>
-
 <div id="qr">
-  <img
-  src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://google.com"
-  style="width:110px;height:110px;border-radius:6px;">
-</div>
 
-<div class="timer_track">
-<div id="timer_bar"></div>
-</div>
-
-<div class="timer_label">
-<span>남은시간</span>
-<span id="sec">30초</span>
-</div>
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://google.com">
 
 </div>
 
-<div class="scan_text">
-QR코드를 스캔하세요
-</div>
-
-<div class="detail_btn" id="detail_open">
+<div class="btn">
 상세정보 표시
 </div>
 
 </div>
 
-<!-- 상세 -->
-
-<div id="detail_page">
-
-<div class="top_bar">
-
-<div class="logo_wrap">
-<div class="logo"></div>
-Digital Mobile Pass
-</div>
-
-<div class="menu">☰</div>
-
-</div>
-
-<div class="detail_card">
-
-<div class="detail_photo">
-<img
-id="detail_photo"
-src="https://picsum.photos/300/400">
-</div>
-
-<div class="detail_name" id="detail_name">
-김민준
-</div>
-
-<div class="detail_birth" id="detail_birth">
-060424-1234567
-</div>
-
-<div class="detail_addr" id="detail_addr">
-서울특별시 강남구 테헤란로
-</div>
-
-<div class="bottom_info">
-
-<div class="issue_date">
-2026.05.24
-</div>
-
-<div class="city" id="city">
-서울시청
-</div>
-
-</div>
-
-</div>
-
-<div class="back_btn" id="back_btn">
-‹
-</div>
-
-</div>
-
-<!-- 배너 -->
-
 <div class="banner">
-
-<div class="banner_track">
-
-<div class="banner_text">
 보안 시스템이 활성화되어 있습니다
 </div>
-
-<div class="banner_text">
-보안 시스템이 활성화되어 있습니다
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- 관리자 -->
-
-<div id="admin">
-
-<input id="in_name" placeholder="이름">
-
-<input id="in_birth"
-placeholder="000000-0000000">
-
-<input id="in_addr1"
-placeholder="기본주소">
-
-<input id="in_city"
-placeholder="기관명">
-
-<input type="file" id="in_photo">
-
-<button id="apply_btn">
-적용하기
-</button>
 
 </div>
 
 <script>
-
-/* PWA */
 
 if("serviceWorker" in navigator){
 
 navigator.serviceWorker.register("service-worker.js");
 
 }
-
-/* QR */
-
-
-/* 타이머 */
-
-let total=300;
-let current=300;
-
-setInterval(()=>{
-
-current--;
-
-if(current<=0){
-current=300;
-}
-
-document.getElementById("timer_bar").style.width=
-(current/total*100)+"%";
-
-document.getElementById("sec").innerText=
-Math.ceil(current/10)+"초";
-
-},100);
-
-/* 상세 */
-
-document.getElementById("detail_open").onclick=()=>{
-
-document.getElementById("detail_page").style.display="flex";
-
-};
-
-document.getElementById("back_btn").onclick=()=>{
-
-document.getElementById("detail_page").style.display="none";
-
-};
-
-/* 관리자 */
-
-let tap=0;
-
-document.getElementById("top_touch").onclick=()=>{
-
-tap++;
-
-if(tap>=3){
-
-document.getElementById("admin").style.display="flex";
-
-tap=0;
-
-}
-
-setTimeout(()=>tap=0,1000);
-
-};
-
-document.getElementById("apply_btn").onclick=()=>{
-
-const name=
-document.getElementById("in_name").value || "김민준";
-
-const birth=
-document.getElementById("in_birth").value || "060424-1234567";
-
-const addr=
-document.getElementById("in_addr1").value || "서울특별시";
-
-const city=
-document.getElementById("in_city").value || "서울시청";
-
-document.getElementById("main_name").innerText=name;
-
-document.getElementById("main_birth").innerText=
-birth.split("-")[0];
-
-document.getElementById("main_addr").innerText=addr;
-
-document.getElementById("detail_name").innerText=name;
-
-document.getElementById("detail_birth").innerText=birth;
-
-document.getElementById("detail_addr").innerText=addr;
-
-document.getElementById("city").innerText=city;
-
-document.getElementById("admin").style.display="none";
-
-};
-
-/* 사진 */
-
-document.getElementById("in_photo").onchange=(e)=>{
-
-const file=e.target.files[0];
-
-if(!file) return;
-
-const reader=new FileReader();
-
-reader.onload=(ev)=>{
-
-document.getElementById("main_photo").src=
-ev.target.result;
-
-document.getElementById("detail_photo").src=
-ev.target.result;
-
-};
-
-reader.readAsDataURL(file);
-
-};
 
 </script>
 
